@@ -1,0 +1,40 @@
+ {
+  "project_info": {
+    "project_number": "145142731868",
+    "firebase_url": "https://quitter-fb265.firebaseio.com",
+    "project_id": "quitter-fb265",
+    "storage_bucket": "quitter-fb265.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145142731868:android:44ddaceea4adfe8c9e4299",
+        "android_client_info": {
+          "package_name": "hr.ferit.dariocoric.quitter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145142731868-52lk3alnfegeviq222ub052kcq3ts9v1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCLIRa6nd1n9A2dBf_9kqa43jl39jY23Eo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145142731868-52lk3alnfegeviq222ub052kcq3ts9v1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

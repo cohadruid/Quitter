@@ -1,12 +1,16 @@
 package hr.ferit.dariocoric.quitter
 
 import android.content.Intent
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
+import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
 
@@ -43,10 +47,34 @@ class MainActivity : AppCompatActivity() {
                 if(!it.isSuccessful) return@addOnCompleteListener
 
                 Log.d("MainActivity", "Created user with uid ${it.result?.user?.uid}")
+                saveUserToFirebaseDatabase();
             }
             .addOnFailureListener {
                 Log.d("MainActivity", "Failed to create user: ${it.message}")
                 Toast.makeText(this, "Please enter credentials", Toast.LENGTH_SHORT).show()
             }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun saveUserToFirebaseDatabase() {
+        val uid = FirebaseAuth.getInstance().uid ?: ""
+        val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+
+        val currentTime = LocalDateTime.now()
+
+        val user = User(uid, edit_text_username_register.text.toString())
+
+        ref.setValue(user)
+            .addOnSuccessListener {
+                Log.d("Main", "User data saved successfully")
+                val intent = Intent(this, OverviewActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+            .addOnFailureListener {
+                Log.d("Main", "Failed to set value to database: ${it.message}")
+            }
+    }
 }
+
+class User(val uid: String, val user: String)

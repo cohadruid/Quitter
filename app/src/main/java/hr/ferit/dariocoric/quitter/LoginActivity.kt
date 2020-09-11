@@ -31,7 +31,9 @@ class LoginActivity: AppCompatActivity() {
 
                     Log.d("LoginActivity","Attempted to login with e: $email and p: $password")
                     Log.d("LoginActivity", "UID: ${it.result?.user?.uid}")
-                    Toast.makeText(this, "good job", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(this, OverviewActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
                 }
                 .addOnFailureListener {
                     Log.d("LoginActivity", "Failed to auth user - ${it.message}")

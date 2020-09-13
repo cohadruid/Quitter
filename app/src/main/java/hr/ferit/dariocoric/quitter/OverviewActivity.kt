@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Button
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_overview.*
 
 class OverviewActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -14,6 +16,35 @@ class OverviewActivity : AppCompatActivity() {
         setContentView(R.layout.activity_overview)
 
         verifyUserIsLoggedIn()
+
+        val overviewFragment = OverviewFragment()
+        val healthFragment = HealthFragment()
+
+        val btnOverviewFragment: Button = btn_overview_1
+        val btnHealthFragment: Button = btn_overview_2
+
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.flFragment, overviewFragment)
+            addToBackStack(null)
+            commit()
+        }
+
+        btnOverviewFragment.setOnClickListener {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.flFragment, overviewFragment)
+                addToBackStack(null)
+                commit()
+            }
+        }
+
+        btnHealthFragment.setOnClickListener {
+            supportFragmentManager.beginTransaction().apply {
+                replace(R.id.flFragment, healthFragment)
+                addToBackStack(null)
+                commit()
+            }
+        }
+
     }
 
     private fun verifyUserIsLoggedIn() {

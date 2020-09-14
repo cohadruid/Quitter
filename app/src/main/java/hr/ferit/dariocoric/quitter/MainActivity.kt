@@ -1,5 +1,6 @@
 package hr.ferit.dariocoric.quitter
 
+import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -10,13 +11,34 @@ import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    var dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.GERMANY)
+    var timeFormat = SimpleDateFormat("hh:mm", Locale.GERMANY)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+
+        buttonTest.setOnClickListener {
+            val now = Calendar.getInstance()
+            val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
+                val selectedDate = Calendar.getInstance()
+                selectedDate.set(Calendar.YEAR,year)
+                selectedDate.set(Calendar.MONTH,month)
+                selectedDate.set(Calendar.DAY_OF_MONTH,dayOfMonth)
+                val date = dateFormat.format(selectedDate.time)
+                textViewDate.text = date.toString()
+                Toast.makeText(this,"date : " + date,Toast.LENGTH_SHORT).show()
+            },
+                    now.get(Calendar.YEAR),now.get(Calendar.MONTH),now.get(Calendar.DAY_OF_MONTH))
+            datePicker.show() }
+
 
         button_register_main.setOnClickListener {
             performRegister()
@@ -60,9 +82,10 @@ class MainActivity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
-        val currentTime = LocalDateTime.now()
-
-        val user = User(uid, edit_text_username_register.text.toString())
+        val quitDate = textViewDate.text.toString()
+        Log.d("Main", "Vrijeme: ${quitDate.substring(0,2)}:${quitDate.substring(3,4)}:${quitDate.substring(6,10)}")
+        val quitUnixTime = (quitDate.substring(0,2).toLong()*24*3600 + (quitDate.substring(3,5).toLong()-1)*30*24*3600 + (quitDate.substring(6,10).toLong() - 1970)*365.25*24*3600).toLong()
+        val user = User(uid, edit_text_username_register.text.toString(), quitDate, quitUnixTime)
 
         ref.setValue(user)
             .addOnSuccessListener {
@@ -77,4 +100,4 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class User(val uid: String, val user: String)
+class User(val uid: String, val user: String, val quitDate: String, val quitUnixTime: Long)

@@ -1,11 +1,15 @@
 package hr.ferit.dariocoric.quitter
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import kotlinx.android.synthetic.main.fragment_overview.*
+import java.sql.Date
+import java.sql.Timestamp
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,6 +45,18 @@ class OverviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val timeCurrent: Timestamp = Timestamp(System.currentTimeMillis())
+        Log.d("OverviewFragment", "Datetime: " + timeCurrent.toString())
+        val dateCurrent = Date(timeCurrent.time)
+        Log.d("OverviewFragment", "Datetime: " + dateCurrent.toString())
+
+        val rightNow: Calendar = Calendar.getInstance()
+
+        val rnLong: Long = rightNow.timeInMillis.toLong()
+
+        Log.d("OverviewFragment", "Milis: " + rnLong.toString())
+
+        tv_time.text = dateCurrent.toString()
 
     }
 

@@ -10,34 +10,61 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import jhonatan.sabadi.datetimepicker.showDateAndTimePicker
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_overview.*
 import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-    var dateFormat = SimpleDateFormat("dd.MM.yyyy.", Locale.GERMANY)
+   /* var dateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm", Locale.GERMANY)
     var timeFormat = SimpleDateFormat("hh:mm", Locale.GERMANY)
+    private var dateMilis: Long = 0*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-        buttonTest.setOnClickListener {
-            val now = Calendar.getInstance()
+        /*edit_text_quittime.setOnClickListener {
+            showDateAndTimePicker { year: Int, month: Int, dayOfMonth: Int, hourOfDay: Int, minute: Int ->
+                val selectedDateTime = Calendar.getInstance()
+                selectedDateTime.set(Calendar.YEAR, year)
+                selectedDateTime.set(Calendar.MONTH, month)
+                selectedDateTime.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                selectedDateTime.set(Calendar.MINUTE, minute)
+
+                dateMilis = selectedDateTime.timeInMillis
+
+                edit_text_quittime.setText(dateFormat.format(selectedDateTime.time).toString())
+
+            }*/
+
+            /*val now = Calendar.getInstance()
             val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
                 val selectedDate = Calendar.getInstance()
                 selectedDate.set(Calendar.YEAR,year)
                 selectedDate.set(Calendar.MONTH,month)
                 selectedDate.set(Calendar.DAY_OF_MONTH,dayOfMonth)
                 val date = dateFormat.format(selectedDate.time)
-                textViewDate.text = date.toString()
-                Toast.makeText(this,"date : " + date,Toast.LENGTH_SHORT).show()
+
+                dateMilis = selectedDate.timeInMillis / 1000
+                val testString = date.toString() //+ " " + dateMilis.toString()
+                val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.", Locale.GERMAN)
+                //val extractedStamp = LocalDate.parse(testString, formatter)//.toEpochDay().toLong()
+               // Log.d("Main", "had $extractedStamp")
+               // Log.d("Main", "virgin $date vs chad $extractedStamp")
+               edit_text_quittime.setText(testString)
+                //Toast.makeText(this,"date : " + date,Toast.LENGTH_SHORT).show()
             },
                     now.get(Calendar.YEAR),now.get(Calendar.MONTH),now.get(Calendar.DAY_OF_MONTH))
-            datePicker.show() }
+            datePicker.show()
+        }*/
 
 
         button_register_main.setOnClickListener {
@@ -59,8 +86,8 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        //Log.d("MainActivity", "Email is $email")
-        //Log.d("MainActivity", "Password is $password")
+        Log.d("MainActivity", "Email is $email")
+        Log.d("MainActivity", "Password is $password")
 
 
         //creating user with email and password
@@ -82,10 +109,8 @@ class MainActivity : AppCompatActivity() {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
 
-        val quitDate = textViewDate.text.toString()
-        Log.d("Main", "Vrijeme: ${quitDate.substring(0,2)}:${quitDate.substring(3,4)}:${quitDate.substring(6,10)}")
-        val quitUnixTime = (quitDate.substring(0,2).toLong()*24*3600 + (quitDate.substring(3,5).toLong()-1)*30*24*3600 + (quitDate.substring(6,10).toLong() - 1970)*365.25*24*3600).toLong()
-        val user = User(uid, edit_text_username_register.text.toString(), quitDate, quitUnixTime)
+
+        val user = User(uid, edit_text_username_register.text.toString(), true)
 
         ref.setValue(user)
             .addOnSuccessListener {
@@ -100,4 +125,4 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class User(val uid: String, val user: String, val quitDate: String, val quitUnixTime: Long)
+class User(val uid: String, val user: String, val newUser: Boolean)

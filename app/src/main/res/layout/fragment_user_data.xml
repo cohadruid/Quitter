@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#7CC1FF"
+    tools:context=".UserDataFragment">
+
+    <EditText
+        android:id="@+id/edit_text_quit_time"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="64dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:hint="@string/when_did_you_quit">
+
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/edit_text_cigs_per_day"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_quit_time"
+        android:hint="@string/how_many_ciggaretes_per_day">
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/edit_text_price_per_pack"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_cigs_per_day"
+        android:hint="@string/price_per_pack_of_cigarettes">
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/edit_text_cigs_per_pack"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_price_per_pack"
+        android:hint="@string/how_many_in_a_pack">
+
+    </EditText>
+
+    <EditText
+        android:id="@+id/edit_text_mins_per_cig"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="32dp"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_cigs_per_pack"
+        android:hint="@string/time_to_smoke_one_cigarette_minutes">
+
+    </EditText>
+
+    <Button
+        android:id="@+id/button_submit_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="64dp"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_mins_per_cig"
+        android:text="@string/submit_data">
+
+    </Button>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

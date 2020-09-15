@@ -2,4 +2,11 @@
     <string name="app_name">Quitter</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edittext_quittime_string">When did you quit?</string>
+    <string name="submit_data">Submit Data</string>
+    <string name="when_did_you_quit">When did you quit?</string>
+    <string name="how_many_ciggaretes_per_day">How many ciggaretes per day?</string>
+    <string name="price_per_pack_of_cigarettes">Price per pack of cigarettes</string>
+    <string name="how_many_in_a_pack">How many in a pack?</string>
+    <string name="time_to_smoke_one_cigarette_minutes">Time to smoke one cigarette? (minutes)</string>
 </resources>

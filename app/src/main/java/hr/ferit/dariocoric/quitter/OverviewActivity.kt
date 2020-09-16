@@ -8,14 +8,21 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_overview.*
 
 class OverviewActivity : AppCompatActivity() {
+    private var isNewUser: Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_overview)
 
         verifyUserIsLoggedIn()
+        checkForNewUser()
+
+        Log.d("OverviewActivity", "Sucessfully verified this nigga")
 
         val overviewFragment = OverviewFragment()
         val healthFragment = HealthFragment()
@@ -55,6 +62,25 @@ class OverviewActivity : AppCompatActivity() {
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
             startActivity(intent)
         }
+    }
+
+    private fun checkForNewUser() {
+        val uid = FirebaseAuth.getInstance().uid
+        val ref = FirebaseDatabase.getInstance().getReference("/users/${uid}")
+        ref.addListenerForSingleValueEvent(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val newUser = snapshot.child("newUser").getValue(Boolean::class.java)!!
+                Log.d("OverviewActivity", newUser.toString())
+
+                if(newUser) {
+                    ref.child("newUser").setValue(false)
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

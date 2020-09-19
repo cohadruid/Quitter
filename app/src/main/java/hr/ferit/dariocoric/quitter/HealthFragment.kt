@@ -1,17 +1,27 @@
 package hr.ferit.dariocoric.quitter
 
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.BaseAdapter
+import android.widget.ListView
+import android.widget.ProgressBar
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.Item
 import com.xwray.groupie.ViewHolder
+import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.fragment_health.*
+import java.lang.Math.floor
+import java.text.SimpleDateFormat
+import java.util.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -27,32 +37,37 @@ class HealthFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
-
+    private var preferences: SharedPreferences? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param1 = it.getString(ARG_PARAM1)
             param2 = it.getString(ARG_PARAM2)
         }
+
+
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_health, container, false)
+        val rootView = inflater.inflate(R.layout.fragment_health, container, false)
+
+        preferences = this.getActivity()!!
+            .getSharedPreferences("USER_DATA_PREFS", AppCompatActivity.MODE_PRIVATE)
+
+
+
+        return rootView
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rvHealthOverview: RecyclerView = rv_health_overview
-        val adapter = GroupAdapter<ViewHolder>()
+        val listView = view.findViewById<ListView>(R.id.listview_health)
 
-        adapter.add(UserItem())
-
-        rvHealthOverview.adapter = adapter
+      //  listView.adapter = ___
     }
 
     companion object {
@@ -75,13 +90,21 @@ class HealthFragment : Fragment() {
             }
     }
 
-    class UserItem: Item<ViewHolder>(){
-        override fun getLayout(): Int {
-            return R.layout.health_overview
+    private class listViewAdapter(): BaseAdapter() {
+        override fun getCount(): Int {
+            TODO("Not yet implemented")
         }
 
-        override fun bind(viewHolder: ViewHolder, position: Int) {
+        override fun getItem(p0: Int): Any {
+            return "FILLER STRING"
+        }
 
+        override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
+            TODO("Not yet implemented")
+        }
+
+        override fun getItemId(p0: Int): Long {
+            return p0.toLong()
         }
     }
 }

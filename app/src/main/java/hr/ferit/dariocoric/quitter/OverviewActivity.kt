@@ -14,13 +14,25 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.android.synthetic.main.activity_overview.*
 
 class OverviewActivity : AppCompatActivity() {
-    private var isNewUser: Boolean = true
+    private var isNewUser: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_overview)
 
+        val preferences = getSharedPreferences("USER_DATA_PREFS", MODE_PRIVATE)
+        val savedUid = preferences.getString("UID", null)
+        val savedUN = preferences.getString("USERNAME", null)
+        val savedDT = preferences.getString("DATETIME", null)
+        val savedTS = preferences.getLong("TIMESTAMP", 0)
+
+        Log.d("OverviewActivity", "Definitely sared prefs: $savedUid and $savedUN")
+        Log.d("OverviewActivity", "Nigga quit on: $savedDT aka $savedTS")
         verifyUserIsLoggedIn()
-        checkForNewUser()
+        Log.d("OverviewActivity", "User is logged in")
+       // checkForNewUser()
+
+        Log.d("OverviewActivity", "Local variable: " + isNewUser.toString())
+
 
         Log.d("OverviewActivity", "Sucessfully verified this nigga")
 
@@ -70,11 +82,14 @@ class OverviewActivity : AppCompatActivity() {
         ref.addListenerForSingleValueEvent(object: ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val newUser = snapshot.child("newUser").getValue(Boolean::class.java)!!
-                Log.d("OverviewActivity", newUser.toString())
+                Log.d("OverviewActivity", "Data from db: " + newUser.toString())
 
                 if(newUser) {
                     ref.child("newUser").setValue(false)
+                    isNewUser = true
                 }
+
+
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -87,6 +102,8 @@ class OverviewActivity : AppCompatActivity() {
         when(item?.itemId) {
             R.id.menu_sign_out -> {
                 FirebaseAuth.getInstance().signOut()
+                val preference = getSharedPreferences("USER_DATA_PREFS", MODE_PRIVATE)
+                preference.edit().clear().apply()
                 val intent = Intent(this, MainActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)

@@ -12,17 +12,17 @@
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
         android:autofillHints="username"
         android:background="#FFFFFF"
         android:ems="10"
-        android:hint="Username"
+        android:hint="@string/username"
         android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/text_view_login_main" />
 
     <EditText
         android:id="@+id/edit_text_email_register"
@@ -32,7 +32,7 @@
         android:autofillHints="email"
         android:background="#FFFFFF"
         android:ems="10"
-        android:hint="Email"
+        android:hint="@string/email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="@+id/edit_text_username_register"
         app:layout_constraintHorizontal_bias="1.0"
@@ -47,7 +47,7 @@
         android:autofillHints="password"
         android:background="#FFFFFF"
         android:ems="10"
-        android:hint="Password"
+        android:hint="@string/password"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="@+id/edit_text_email_register"
         app:layout_constraintHorizontal_bias="0.0"
@@ -58,21 +58,83 @@
         android:id="@+id/button_register_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="160dp"
-        android:text="Register"
+        android:layout_marginTop="48dp"
+        android:text="@string/register"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_text_password_register" />
+        app:layout_constraintTop_toBottomOf="@+id/edittext_price_per_pack" />
 
     <TextView
         android:id="@+id/text_view_login_main"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:text="Already have an account?"
+        android:layout_marginStart="126dp"
+        android:layout_marginTop="96dp"
+        android:layout_marginEnd="126dp"
+        android:text="@string/already_have_an_account"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_register_main" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/edittext_quittime"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:hint="@string/when_did_you_quit"
+        android:inputType="textPersonName"
+        app:layout_constraintEnd_toEndOf="@+id/edit_text_password_register"
+        app:layout_constraintStart_toStartOf="@+id/edit_text_password_register"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_password_register" />
+
+    <EditText
+        android:id="@+id/edittext_cigs_per_day"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:hint="@string/how_many_ciggaretes_per_day"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/edittext_quittime"
+        app:layout_constraintStart_toStartOf="@+id/edittext_quittime"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_quittime" />
+
+    <EditText
+        android:id="@+id/edittext_cigs_per_pack"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:inputType="number"
+        android:hint="@string/how_many_cigarettes_per_pack"
+        app:layout_constraintEnd_toEndOf="@+id/edittext_cigs_per_day"
+        app:layout_constraintStart_toStartOf="@+id/edittext_cigs_per_day"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_cigs_per_day" />
+
+    <EditText
+        android:id="@+id/edittext_price_per_pack"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="32dp"
+        android:background="#FFFFFF"
+        android:ems="10"
+        android:hint="@string/price_per_pack"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/edittext_cigs_per_pack"
+        app:layout_constraintStart_toStartOf="@+id/edittext_cigs_per_pack"
+        app:layout_constraintTop_toBottomOf="@+id/edittext_cigs_per_pack" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

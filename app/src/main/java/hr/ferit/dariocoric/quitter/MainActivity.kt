@@ -21,16 +21,15 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
-   /* var dateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm", Locale.GERMANY)
-    var timeFormat = SimpleDateFormat("hh:mm", Locale.GERMANY)
-    private var dateMilis: Long = 0*/
+   var dateFormat = SimpleDateFormat("dd.MM.yyyy. HH:mm", Locale.GERMANY)
+   // var timeFormat = SimpleDateFormat("hh:mm", Locale.GERMANY)
+    private var dateSecs: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        /*edit_text_quittime.setOnClickListener {
+        edittext_quittime.setOnClickListener {
             showDateAndTimePicker { year: Int, month: Int, dayOfMonth: Int, hourOfDay: Int, minute: Int ->
                 val selectedDateTime = Calendar.getInstance()
                 selectedDateTime.set(Calendar.YEAR, year)
@@ -39,32 +38,12 @@ class MainActivity : AppCompatActivity() {
                 selectedDateTime.set(Calendar.HOUR_OF_DAY, hourOfDay)
                 selectedDateTime.set(Calendar.MINUTE, minute)
 
-                dateMilis = selectedDateTime.timeInMillis
+                dateSecs = selectedDateTime.timeInMillis / 1000
 
-                edit_text_quittime.setText(dateFormat.format(selectedDateTime.time).toString())
+                edittext_quittime.setText(dateFormat.format(selectedDateTime.time).toString())
 
-            }*/
-
-            /*val now = Calendar.getInstance()
-            val datePicker = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
-                val selectedDate = Calendar.getInstance()
-                selectedDate.set(Calendar.YEAR,year)
-                selectedDate.set(Calendar.MONTH,month)
-                selectedDate.set(Calendar.DAY_OF_MONTH,dayOfMonth)
-                val date = dateFormat.format(selectedDate.time)
-
-                dateMilis = selectedDate.timeInMillis / 1000
-                val testString = date.toString() //+ " " + dateMilis.toString()
-                val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy.", Locale.GERMAN)
-                //val extractedStamp = LocalDate.parse(testString, formatter)//.toEpochDay().toLong()
-               // Log.d("Main", "had $extractedStamp")
-               // Log.d("Main", "virgin $date vs chad $extractedStamp")
-               edit_text_quittime.setText(testString)
-                //Toast.makeText(this,"date : " + date,Toast.LENGTH_SHORT).show()
-            },
-                    now.get(Calendar.YEAR),now.get(Calendar.MONTH),now.get(Calendar.DAY_OF_MONTH))
-            datePicker.show()
-        }*/
+            }
+        }
 
 
         button_register_main.setOnClickListener {
@@ -80,8 +59,9 @@ class MainActivity : AppCompatActivity() {
     private fun performRegister() {
         val email = edit_text_email_register.text.toString()
         val password = edit_text_password_register.text.toString()
+        val quitdate = edittext_quittime.text.toString()
 
-        if(email.isEmpty() || password.isEmpty()) {
+        if(email.isEmpty() || password.isEmpty() || quitdate.isEmpty()) {
             Toast.makeText(this, "Please enter email/password", Toast.LENGTH_SHORT).show()
             return
         }
@@ -108,9 +88,20 @@ class MainActivity : AppCompatActivity() {
     private fun saveUserToFirebaseDatabase() {
         val uid = FirebaseAuth.getInstance().uid ?: ""
         val ref = FirebaseDatabase.getInstance().getReference("/users/$uid")
+        val preferences = getSharedPreferences("USER_DATA_PREFS", MODE_PRIVATE)
+        val editor = preferences.edit()
+        editor.apply {
+            putString("UID", uid)
+            putString("USERNAME", edit_text_username_register.text.toString())
+            putLong("TIMESTAMP", dateSecs)
+            putString("DATETIME", edittext_quittime.text.toString())
+            putInt("CIGS_PER_DAY", edittext_cigs_per_day.text.toString().toInt())
+            putInt("CIGS_PER_PACK", edittext_cigs_per_pack.text.toString().toInt())
+            putInt("PRICE_PER_PACK", edittext_price_per_pack.text.toString().toInt())
+        }.apply()
 
 
-        val user = User(uid, edit_text_username_register.text.toString(), true)
+        val user = User(uid, edit_text_username_register.text.toString(),dateSecs,  edittext_quittime.text.toString(), edittext_cigs_per_day.text.toString().toInt(), edittext_cigs_per_pack.text.toString().toInt(), edittext_price_per_pack.text.toString().toInt())
 
         ref.setValue(user)
             .addOnSuccessListener {
@@ -125,4 +116,4 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class User(val uid: String, val user: String, val newUser: Boolean)
+class User(val uid: String, val user: String, val quitTimeStamp: Long, val datetime: String, val cpd: Int, val cpp: Int, val ppp: Int)

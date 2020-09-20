@@ -1,7 +1,12 @@
 package hr.ferit.dariocoric.quitter
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.SharedPreferences
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
+import android.text.Layout
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -38,6 +43,7 @@ class HealthFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var preferences: SharedPreferences? = null
+    private var quitTime: Long = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -48,18 +54,17 @@ class HealthFragment : Fragment() {
 
     }
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_health, container, false)
-
         preferences = this.getActivity()!!
             .getSharedPreferences("USER_DATA_PREFS", AppCompatActivity.MODE_PRIVATE)
+        quitTime = preferences!!.getLong("TIMESTAMP", 0) * 1000
 
 
-
-        return rootView
+        return inflater.inflate(R.layout.fragment_health, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,44 +72,87 @@ class HealthFragment : Fragment() {
 
         val listView = view.findViewById<ListView>(R.id.listview_health)
 
-      //  listView.adapter = ___
+        listView.adapter = ListViewAdapter(this.requireContext(), quitTime)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HealthFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HealthFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
-    }
 
-    private class listViewAdapter(): BaseAdapter() {
-        override fun getCount(): Int {
-            TODO("Not yet implemented")
+
+    private class ListViewAdapter(context: Context, quitTS: Long): BaseAdapter() {
+
+        private val mContext: Context
+        val date = Calendar.getInstance()
+        val dateNow: Long = date.timeInMillis
+        val quitTime = quitTS
+        private val healthHeaders = arrayListOf<String>(
+            "20 minutes: Your blood pressure and heart rate decrease", "8 hours: The carbon monoxide level in your blood returns to normal"
+        )
+        private val healthHours = arrayListOf<Double>(0.33, 24.0)
+        val hour = 60*60
+
+        init {
+            mContext = context
         }
 
-        override fun getItem(p0: Int): Any {
+        override fun getCount(): Int {
+            //return 5
+            return healthHeaders.size
+        }
+
+        override fun getItem(position: Int): Any {
             return "FILLER STRING"
         }
 
-        override fun getView(p0: Int, p1: View?, p2: ViewGroup?): View {
-            TODO("Not yet implemented")
+        @SuppressLint("ViewHolder")
+        override fun getView(position: Int, convertView: View?, viewGroup: ViewGroup?): View {
+            val layoutInflater = LayoutInflater.from(mContext)
+            val rowMain = layoutInflater.inflate(R.layout.health_fragment_row, viewGroup, false)
+            val rowProgressBar = rowMain.findViewById<ProgressBar>(R.id.row_progressbar)
+            val rowHeader = rowMain.findViewById<TextView>(R.id.row_title)
+            val plusTime = healthHours.get(position) * hour * 1000
+            val plusTime2 = plusTime / 1000
+
+            val timeLeft = quitTime + plusTime - dateNow
+            val timeLeft2 = timeLeft / 1000
+            val timeDiff = (dateNow - quitTime)/1000
+            //Log.d("HealthFragment", "dateNow: " + dateNow.toString())
+            //Log.d("HealthFragment", "quitTime: " + quitTime.toString())
+            val diffDays = floor(timeLeft / (24*60*60 * 1000))
+            val diffHrs = floor((timeLeft/(60*60*1000))%60)
+            val diffMins = (timeLeft / (60*1000)) % 60
+            rowHeader.text = healthHeaders.get(position)
+            //rowProgressBar.rotation = 180f
+            rowProgressBar.progressTintList = ColorStateList.valueOf(Color.CYAN)
+            rowProgressBar.progressBackgroundTintList = ColorStateList.valueOf(Color.BLUE)
+            rowProgressBar.max = plusTime2.toInt()
+            rowProgressBar.progress = timeDiff.toInt()
+            //Log.d("HealthFragment", "PlusTime: " + plusTime2.toString())
+            //Log.d("HealthFragment", "DiffCount: " + timeDiff.toString())
+            val rowProgressText = rowMain.findViewById<TextView>(R.id.row_progress)
+            when {
+                diffMins < 0 -> {
+                    rowProgressText?.text =  mContext.getString(R.string.health_congratulations)
+                }
+                diffHrs <= 0 -> {
+                    rowProgressText?.text = (mContext.getString(R.string.health_reached) + " "
+                            + diffMins.toInt().toString() + " " + mContext.getString(R.string.time_minutes))
+                }
+                diffDays <= 0 -> {
+                    rowProgressText?.text = (mContext.getString(R.string.health_reached) + " "
+                            + diffHrs.toInt().toString() + " " + mContext.getString(R.string.time_hours) + " "
+                            + diffMins.toInt().toString() + " " + mContext.getString(R.string.time_minutes))
+                }
+                else -> {
+                    rowProgressText?.text = (mContext.getString(R.string.health_reached) + " "
+                            + diffDays.toInt().toString() + " " + mContext.getString(R.string.time_days) + " "
+                            + diffHrs.toInt().toString() + " " + mContext.getString(R.string.time_hours) + " "
+                            + diffMins.toInt().toString() + " " + mContext.getString(R.string.time_minutes))
+                }
+            }
+            return rowMain
         }
 
-        override fun getItemId(p0: Int): Long {
-            return p0.toLong()
+        override fun getItemId(position: Int): Long {
+            return position.toLong()
         }
     }
 }

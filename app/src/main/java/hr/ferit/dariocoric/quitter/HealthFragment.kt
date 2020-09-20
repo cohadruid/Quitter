@@ -84,9 +84,12 @@ class HealthFragment : Fragment() {
         val dateNow: Long = date.timeInMillis
         val quitTime = quitTS
         private val healthHeaders = arrayListOf<String>(
-            "20 minutes: Your blood pressure and heart rate decrease", "8 hours: The carbon monoxide level in your blood returns to normal"
+            "30 minutes: Your blood pressure and heart rate decrease", "8 hours: The carbon monoxide level in your blood returns to normal",
+            "24 hours: Your chance of a heart attack decreases", "48 hours: Your ability to taste and smell starts to return",
+            "72 hours: Your airways start to relax", "5 days: Number of cravings is reduced to 3 per day",
+            "10 days: circulation in your gums returns to norma.", "4 weeks: Your circulation improves and your lung function increases"
         )
-        private val healthHours = arrayListOf<Double>(0.33, 24.0)
+        private val healthHours = arrayListOf<Double>(0.5, 8.0, 24.0, 48.0, 72.0, 120.0, 240.0, 672.0)
         val hour = 60*60
 
         init {

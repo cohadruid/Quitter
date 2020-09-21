@@ -108,6 +108,11 @@ class OverviewActivity : AppCompatActivity() {
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
             }
+            R.id.menu_social -> {
+                val intent = Intent(this, SocialActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK.or(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
         }
 
         return super.onOptionsItemSelected(item)

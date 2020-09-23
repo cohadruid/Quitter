@@ -44,7 +44,7 @@ class OverviewActivity : AppCompatActivity() {
 
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.flFragment, overviewFragment)
-            addToBackStack(null)
+            //addToBackStack(null)
             commit()
         }
 

@@ -116,4 +116,6 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
-class User(val uid: String, val user: String, val quitTimeStamp: Long, val datetime: String, val cpd: Int, val cpp: Int, val ppp: Int)
+class User(val uid: String, val user: String, val quitTimeStamp: Long, val datetime: String, val cpd: Int, val cpp: Int, val ppp: Int) {
+    constructor() : this("","",0,"",0,0,0)
+}

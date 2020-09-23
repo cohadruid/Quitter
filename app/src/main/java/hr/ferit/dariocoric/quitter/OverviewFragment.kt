@@ -78,15 +78,27 @@ class OverviewFragment : Fragment() {
         val daysPassed = timeElapsed / (3600*24)
         val hrsPassed = (timeElapsed / 3600) % 24
         val minsPassed = (timeElapsed / 60) % 60
-        val secsElapsed = timeElapsed % 60
         val packsPerDay: Float = cpd!!.toFloat() / cpp!!
         val money_saved_ratio: Float = (timeElapsed.toFloat() / day) * packsPerDay
         val cns_ratio: Float = timeElapsed.toFloat() / day
         val moneySaved = decFormat.format((ppp!!.times(money_saved_ratio)))
         val cigsNotSmoked = decFormat.format((cpd!!.times(cns_ratio)))
-        tvTime.text = "It's been $daysPassed days $hrsPassed hours $minsPassed minutes $secsElapsed seconds"
+        tvTime.text = "It's been $daysPassed days $hrsPassed hours $minsPassed minutes"
         tvMoney.text = "You saved HRK $moneySaved"
         tv_cigs_not_smoked.text = "You avoided $cigsNotSmoked cigarettes!"
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        if (isVisibleToUser) {
+            if (getFragmentManager() != null) {
+                getFragmentManager()
+                    ?.beginTransaction()
+                    ?.detach(this)
+                    ?.attach(this)
+                    ?.commit()
+            }
+        }
     }
 }
 

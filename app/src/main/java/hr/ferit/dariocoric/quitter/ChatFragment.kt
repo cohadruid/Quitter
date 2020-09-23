@@ -95,14 +95,21 @@ class ChatFragment : Fragment() {
     }
 
     private fun listenForMessages() {
-        val ref = FirebaseDatabase.getInstance().getReference("/messages")
+        val fromId = FirebaseAuth.getInstance().uid.toString()
+        val toId = SelectedUser.getUser().uid
+        val ref = FirebaseDatabase.getInstance().getReference("/user_messages/$fromId/$toId")
 
         ref.addChildEventListener(object: ChildEventListener {
             override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
                 val chatMessage = snapshot.getValue(ChatMessage::class.java)
 
-                if(chatMessage != null)
-                    adapter.add(ChatFromItem(chatMessage.text))
+                if(chatMessage != null) {
+                    if(chatMessage.fromId == fromId) {
+                        adapter.add(ChatFromItem(chatMessage.text))
+                    } else {
+                        adapter.add(ChatToItem(chatMessage.text))
+                    }
+                }
             }
 
             override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
@@ -126,18 +133,20 @@ class ChatFragment : Fragment() {
 
     private fun sendMessage() {
         val text = edittext_message.text.toString()
+        edittext_message.text.clear()
 
         val fromId = FirebaseAuth.getInstance().uid.toString()
         val toId = SelectedUser.getUser().uid
 
-        //val ref = FirebaseDatabase.getInstance().getReference("/messages").push()
-        val ref = FirebaseDatabase.getInstance().getReference("/user_messages/$fromId/$toId")
+        val fromRef = FirebaseDatabase.getInstance().getReference("/user_messages/$fromId/$toId").push()
+        val toRef = FirebaseDatabase.getInstance().getReference("/user_messages/$toId/$fromId").push()
 
-        val chatMessage = ChatMessage(ref.key!!, text, fromId.toString(), toId, System.currentTimeMillis()/1000)
-        ref.setValue(chatMessage)
+        val chatMessage = ChatMessage(fromRef.key!!, text, fromId.toString(), toId, System.currentTimeMillis()/1000)
+        fromRef.setValue(chatMessage)
             .addOnSuccessListener {
                 Log.d("ChatFrag", chatMessage.text)
             }
+        toRef.setValue(chatMessage)
     }
 
     companion object {
